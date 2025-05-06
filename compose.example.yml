@@ -96,6 +96,26 @@ services:
       timeout: 5s
       retries: 5
 
+  nginx:
+    build: ./nginx/
+    container_name: nginx
+    tty: true
+    stdin_open: true
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - main
+    depends_on:
+      - web
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "service", "nginx", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
 volumes:
   app-storage:
   postgres-data:
